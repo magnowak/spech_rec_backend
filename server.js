@@ -7,6 +7,7 @@ const axios = require('axios');
 const OpenAI = require('openai');
 const dotenv = require('dotenv');
 const getInitialPrompt = require('./getInitialPrompt');
+const getSystemPrompt = require('./getSystemPrompt');
 
 dotenv.config();
 const openAI_key = process.env.OPENAI_API_KEY;
@@ -35,7 +36,10 @@ app.post('/api/transcribe', upload.single('audio'), async (req, res) => {
 
     const formData = new FormData();
     const audioStream = bufferToStream(audioFile.buffer);
-    formData.append('file', audioStream, { filename: 'audio.mp3', contentType: audioFile.mimetype });
+    formData.append('file', audioStream, {
+      filename: 'audio.mp3',
+      contentType: audioFile.mimetype,
+    });
     formData.append('model', 'whisper-1');
     formData.append('response_format', 'json');
 
@@ -70,8 +74,7 @@ app.post('/api/fillForm', async (req, res) => {
       messages: [
         {
           role: 'system',
-          content:
-          'You are a form data processor, extracting information from provided text and returning it in the required JSON format.',
+          content: getSystemPrompt(),
         },
         {
           role: 'user',
