@@ -61,8 +61,6 @@ app.post('/api/fillForm', async (req, res) => {
     const text = JSON.stringify(req.body.text);
     const formData = JSON.stringify(req.body.formData);
 
-    console.log('text', text);
-
     const client = new OpenAI({ apiKey: openAI_key });
 
     const completion = await client.chat.completions.create({
