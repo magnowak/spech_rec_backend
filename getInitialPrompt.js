@@ -10,9 +10,12 @@ const getInitialPrompt = (text, formConfig, formData) => {
     You must follow these rules:
     1 - The keys should be in camelCase.
     2 - The values should be of the data type specified for that field in the configuration object.
-    3 - If the form configuration for a particular field contains a list of options, instead of using the information from the text directly, select the option that most accurately represents the information and set it as the value for that field.
+    3 - If the form configuration for a particular field contains a list of options, \
+    instead of using the information from the text directly,\
+    select the option that most accurately represents the information and set it as the value for that field.
     4 - If the form configuration for a particular field contains a pattern property, format the value accordingly.
-    5 - If the form configuration for a particular field contains a comment property, adapt the value in a way that complies with the specified comment.
+    5 - If the form configuration for a particular field contains a comment property, \
+    adapt the value in a way that complies with the specified comment.
     6 - If for a particular key, no value was found in the text, keep the original value.
     7 - Print out only the keys and values. \
     Always write the output of your response in JSON format. \
