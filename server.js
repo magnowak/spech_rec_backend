@@ -6,6 +6,7 @@ const { Readable } = require('stream');
 const axios = require('axios');
 const OpenAI = require('openai');
 const dotenv = require('dotenv');
+const getInitialPrompt = require('./getInitialPrompt');
 
 dotenv.config();
 const openAI_key = process.env.OPENAI_API_KEY;
@@ -59,6 +60,7 @@ app.post('/api/transcribe', upload.single('audio'), async (req, res) => {
 app.post('/api/fillForm', async (req, res) => {
   try {
     const text = JSON.stringify(req.body.text);
+    const formConfig = JSON.stringify(req.body.formConfig);
     const formData = JSON.stringify(req.body.formData);
 
     const client = new OpenAI({ apiKey: openAI_key });
@@ -68,14 +70,12 @@ app.post('/api/fillForm', async (req, res) => {
       messages: [
         {
           role: 'system',
-          content: 'You are a helpful assistant, helping with form completion.',
+          content:
+          'You are a form data processor, extracting information from provided text and returning it in the required JSON format.',
         },
         {
           role: 'user',
-          content: `From text: ${text} generate json with name, address, email, gender, age group, whether the user accepts terms and consitions and whether they enable tracking.
-          For age value, choose from the following options: '<20' for age values below 20, '20-60' for age values between 20 and 60 and '>60' for age values above 60.
-          Returned JSON should have the following structure: ${formData}.
-          If for a particular key, no value was found in the text, keep the original value.`,
+          content: getInitialPrompt(text, formConfig, formData),
         },
       ],
     });
